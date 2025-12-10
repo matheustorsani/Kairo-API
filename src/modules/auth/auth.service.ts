@@ -1,17 +1,7 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../../database/prisma";
 import jwt from "jsonwebtoken";
-
-interface Register {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface Login {
-  email: string;
-  password: string;
-}
+import { Login, Register } from "../../types/Auth";
 
 export class AuthService {
   async register(data: Register) {
@@ -51,21 +41,53 @@ export class AuthService {
 
     if (!user || !pass) throw new Error("Email ou senha inválidos.");
 
-    const token = jwt.sign(
-      { sub: user.id },
-      process.env.JWT_SECRET!,
-      { expiresIn: "1d" }
-    )
+    const acessToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "15m" });
+    const refreshToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "7d" });
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      }
+    });
 
     return {
       message: "Login realizado com sucesso!",
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-      },
+      acessToken, refreshToken
     };
   };
+
+  async refresh(token: string) {
+    if (!token) throw new Error("Um token é necessário");
+
+    const dbToken = await prisma.refreshToken.findUnique({
+      where: { token }
+    });
+
+    if (!dbToken) throw new Error("Token inválido.");
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { sub: string };
+      const accessToken = jwt.sign({ sub: decoded.sub }, process.env.JWT_SECRET!, { expiresIn: "15m" });
+
+      return { accessToken };
+    } catch (err: any) {
+      throw new Error("Token expirado.");
+    }
+  }
+
+  async logout(token: string) {
+    if (!token) throw new Error("Um token é necessário");
+    const db = await prisma.refreshToken.findUnique({
+      where: { token }
+    });
+    if (!db) throw new Error("Token inválido.");
+
+    await prisma.refreshToken.delete({
+      where: { token }
+    });
+
+    return { message: "Logout realizado com sucesso, até logo!" };
+  }
 };

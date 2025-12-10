@@ -6,7 +6,7 @@ const service = new UserService();
 export default class UserController {
   async me(req: FastifyRequest, res: FastifyReply) {
     const userId = (req as any).user.id;
-    if (!userId) return res.status(401).send({ message: "Usuário não autenticado."});
+    if (!userId) return res.status(401).send({ error: "Usuário não autenticado."});
 
     const user = await service.getProfile(userId);
 

@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 export async function authMiddleware(req: FastifyRequest, res: FastifyReply) {
   const auth = req.headers.authorization;
-  if (!auth) return res.status(401).send({ error: "Um token é necessário" });
+  if (!auth) return res.status(400).send({ error: "Um token é necessário" });
   const token = auth.replace("Bearer ", "");
 
   try {
