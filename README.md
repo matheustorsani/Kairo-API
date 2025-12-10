@@ -123,6 +123,22 @@ POST /auth/login
 }
 ```
 
+- Refresh
+```json
+POST /auth/refresh
+{
+  "token": "<refresh_token>"
+}
+```
+
+- Logout
+```json
+POST /auth/logout
+{
+  "token": "<refresh_token>"
+}
+```
+
 ---
 
 ## Próximos passos do projeto
