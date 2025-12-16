@@ -32,10 +32,16 @@ src/
 │   │   ├── auth.routes.ts
 │   │   ├── auth.schema.ts
 │   │   └── auth.service.ts
-│   └── user/
-│       ├── user.controller.ts
-│       ├── user.routes.ts
-│       └── user.service.ts
+│   ├── user/
+│   │   ├── user.controller.ts
+│   │   ├── user.routes.ts
+│   │   ├── user.schema.ts
+│   │   └── user.service.ts
+│   └── task/
+│       ├── task.controller.ts
+│       ├── task.routes.ts
+│       ├── task.schema.ts
+│       └── task.service.ts
 └── index.ts
 ```
 
@@ -50,6 +56,9 @@ Arquitetura organizada por módulos, facilitando escalabilidade e leitura.
 
 **Login**
 `POST /auth/login`
+
+**Tasks**
+`POST, GET, PUT, DELETE /tasks/(:id)`
 
 **Autenticação via JWT (Bearer Token)**
 
@@ -143,10 +152,10 @@ POST /auth/logout
 
 ## Próximos passos do projeto
 
-- Implementar módulo de usuario (/user/me)
-- Criar CRUD de tarefas
+- Implementar módulo de usuario (/user/me) ✅
+- Criar CRUD de tarefas ✅
 - Criar sistema de categorias e hábitos
-- Criar refresh tokens
+- Criar refresh tokens ✅
 - Adicionar documentação Swagger (OpenAPI)
 - Adicionar testes unitários (Vitest)
 
