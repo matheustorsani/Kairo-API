@@ -8,12 +8,12 @@ const controller = new UserController();
 export async function userRoutes(app: FastifyInstance) {
   app.addHook("preHandler", authMiddleware);
 
-  app.get("/me", (req, res) => controller.me(req, res));
+  app.get("/me", controller.me);
   app.patch(
     "/me",
     {
       schema: userSchema.shape.body,
     },
-    (req, res) => controller.updateUser(req, res)
+    controller.updateUser
   )
 }

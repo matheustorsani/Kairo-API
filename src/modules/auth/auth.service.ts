@@ -22,13 +22,10 @@ export class AuthService {
     })
 
     return {
-      message: "Registro realizado com sucesso!",
-      user: {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
         createdAt: newUser.createdAt,
-      }
     }
   };
 
@@ -53,7 +50,6 @@ export class AuthService {
     });
 
     return {
-      message: "Login realizado com sucesso!",
       acessToken, refreshToken
     };
   };

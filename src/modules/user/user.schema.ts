@@ -7,5 +7,3 @@ export const userSchema = z.object({
     password: z.string().min(6).optional(),
   })
 });
-
-export type UpdatedUser = z.infer<typeof userSchema>['body'];
