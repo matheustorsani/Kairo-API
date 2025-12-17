@@ -41,7 +41,7 @@ export class TaskController {
   }
 
   update = async (req: FastifyRequest, res: FastifyReply) => {
-    // vai entender pq no getbyid ele retorna null e aqui não
+    // vai entender pq no getById ele retorna null e aqui não
     try {
       const { id } = req.params as { id: string };
       const task = await this.service.update(id, req.body);

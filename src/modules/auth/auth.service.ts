@@ -38,7 +38,7 @@ export class AuthService {
 
     if (!user || !pass) throw new Error("Email ou senha inválidos.");
 
-    const acessToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "15m" });
+    const accessToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "15m" });
     const refreshToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "7d" });
 
     await prisma.refreshToken.create({
@@ -50,7 +50,7 @@ export class AuthService {
     });
 
     return {
-      acessToken, refreshToken
+      accessToken, refreshToken
     };
   };
 
