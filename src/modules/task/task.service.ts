@@ -32,4 +32,17 @@ export class TaskService {
       where: { id: taskId },
     });
   };
+
+  async getByFilter(userId: string, filter: any) {
+    if (Object.keys(filter).length === 0) return this.getAll(userId);
+
+    let filters: any = {};
+    if (filter.done) filters = { ...filters, done: filter.done === 'true' };
+    if (filter.search) filters = { ...filters, title: { contains: filter.search, mode: 'insensitive' } };
+
+    return await prisma.task.findMany({
+      where: { userId, ...filters },
+      orderBy: { createdAt: 'desc' }
+    })
+  }
 }

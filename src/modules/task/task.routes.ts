@@ -13,4 +13,5 @@ export async function taskRoutes(app: FastifyInstance) {
   app.get("/:id", controller.getById);
   app.put("/:id", controller.update);
   app.delete("/:id", controller.delete);
+  app.get("/filter:status", controller.getByFilter);
 }

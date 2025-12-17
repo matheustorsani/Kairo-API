@@ -41,15 +41,18 @@ export class TaskController {
   }
 
   update = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as { id: string };
-    const task = await this.service.update(id, req.body);
+    // vai entender pq no getbyid ele retorna null e aqui não
+    try {
+      const { id } = req.params as { id: string };
+      const task = await this.service.update(id, req.body);
 
-    if (!task) throw new Error("Tarefa não encontrada.");
-
-    return res.status(200).send({
-      message: "Tarefa atualizada com sucesso!",
-      task
-    });
+      return res.status(200).send({
+        message: "Tarefa atualizada com sucesso!",
+        task
+      });
+    } catch {
+      throw new Error("Tarefa não encontrada.")
+    }
   }
 
   delete = async (req: FastifyRequest, res: FastifyReply) => {
@@ -58,5 +61,17 @@ export class TaskController {
     return res.status(200).send({
       message: "Tarefa deletada com sucesso!"
     });
+  }
+
+  getByFilter = async (req: FastifyRequest, res: FastifyReply) => {
+    const userId = (req as any).user.id;
+    if (!userId) throw new Error("Usuário não autenticado.");
+    const filter = req.query as any;
+
+    const tasks = await this.service.getByFilter(userId, filter);
+
+    if (tasks.length === 0) throw new Error("Nenhuma tarefa encontrada.");
+
+    return res.status(200).send(tasks)
   }
 }

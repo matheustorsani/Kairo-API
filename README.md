@@ -1,6 +1,6 @@
-# FocusFlow — API (Node.js + Fastify + TypeScript + Prisma + PostgreSQL)
+# Kairo — API (Node.js + Fastify + TypeScript + Prisma + PostgreSQL)
 
-FocusFlow é um sistema de produtividade assistido por IA, focado em organização pessoal, gestão de tarefas e acompanhamento de hábitos.
+Kairo é um sistema de produtividade assistido por IA, focado em organização pessoal, gestão de tarefas e acompanhamento de hábitos.
 Este repositório contém a API backend construída com uma arquitetura modular e escalável.
 
 ---
@@ -59,7 +59,7 @@ Arquitetura organizada por módulos, facilitando escalabilidade e leitura.
 
 **Tasks**
 `POST, GET, PUT, DELETE /tasks/(:id)`
-
+`GET /tasks/filter?search=tarefa&done={true|false}`
 **Autenticação via JWT (Bearer Token)**
 
 ---
@@ -68,8 +68,8 @@ Arquitetura organizada por módulos, facilitando escalabilidade e leitura.
 
 1. Clone o repositório
 ```sh
-git clone https://github.com/matheustorsani/FocusFlow-API.git
-cd FocusFlow-API
+git clone https://github.com/matheustorsani/Kairo-API.git
+cd Kairo-API
 ```
 
 2. Instale as dependências
@@ -79,7 +79,7 @@ npm install
 
 3. Crie o arquivo `.env`
 ```sh
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/focusflow"
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/kairo"
 JWT_SECRET="sua_chave_secreta_aqui"
 ```
 
