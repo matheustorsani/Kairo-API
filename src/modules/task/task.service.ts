@@ -33,16 +33,23 @@ export class TaskService {
     });
   };
 
-  async getByFilter(userId: string, filter: any) {
-    if (Object.keys(filter).length === 0) return this.getAll(userId);
+  async getByFilter(userId: string, filter: { done?: string; search?: string; priority?: string; dueDate?: string; expired?: string }) {
+    if (!Object.keys(filter).length) return this.getAll(userId);
 
-    let filters: any = {};
-    if (filter.done) filters = { ...filters, done: filter.done === 'true' };
-    if (filter.search) filters = { ...filters, title: { contains: filter.search, mode: 'insensitive' } };
+    let where: any = { userId };
+
+    if (filter.done !== undefined) where.done = filter.done === 'true';
+    if (filter.search) where.title = { contains: filter.search, mode: 'insensitive' };
+    if (filter.priority) where.priority = filter.priority;
+    if (filter.dueDate) where.dueDate = new Date(filter.dueDate);
+    if (filter.expired === 'true') {
+      where.dueDate = { lt: new Date() };
+      where.done = false;
+    }
 
     return await prisma.task.findMany({
-      where: { userId, ...filters },
+      where,
       orderBy: { createdAt: 'desc' }
-    })
+    });
   }
 }
