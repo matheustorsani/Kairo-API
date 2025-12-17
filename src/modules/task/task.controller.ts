@@ -20,15 +20,17 @@ export class TaskController {
     }
   }
 
-  getAll = async (req: FastifyRequest, res: FastifyReply) => {
+  list = async (req: FastifyRequest, res: FastifyReply) => {
     const userId = (req as any).user.id;
     if (!userId) throw new Error("Usuário não autenticado.");
 
-    const task = await this.service.getAll(userId) ?? null;
+    const { cursor, limit, ...filters } = req.query as any;
 
-    if (!task) throw new Error("Nenhuma tarefa encontrada.");
+    const result = await this.service.getPaginated(userId, {
+      cursor, limit: limit ? Number(limit) : 10, filter: filters
+    });
 
-    return res.status(200).send(task)
+    return res.status(200).send(result);
   }
 
   getById = async (req: FastifyRequest, res: FastifyReply) => {
@@ -61,17 +63,5 @@ export class TaskController {
     return res.status(200).send({
       message: "Tarefa deletada com sucesso!"
     });
-  }
-
-  getByFilter = async (req: FastifyRequest, res: FastifyReply) => {
-    const userId = (req as any).user.id;
-    if (!userId) throw new Error("Usuário não autenticado.");
-    const filter = req.query as any;
-
-    const tasks = await this.service.getByFilter(userId, filter);
-
-    if (tasks.length === 0) throw new Error("Nenhuma tarefa encontrada.");
-
-    return res.status(200).send(tasks)
   }
 }
